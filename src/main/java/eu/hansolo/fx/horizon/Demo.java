@@ -18,7 +18,10 @@ package eu.hansolo.fx.horizon;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Border;
@@ -41,7 +44,8 @@ import java.util.Random;
  * Time: 09:03
  */
 public class Demo extends Application {
-    private static final Random         RND = new Random();
+    private static final Random         RND       = new Random();
+    private static       int            noOfNodes = 0;
     private              HorizonChart   chartBand1;
     private              HorizonChart   chartBand2;
     private              HorizonChart   chartBand3;
@@ -127,7 +131,12 @@ public class Demo extends Application {
                         double value = Math.abs(Math.cos(i/100.0) + (RND.nextDouble() - 0.5) / 10.0); // Only positive data
                         dataList.get(i).setY(value);
                     }
+                    // Redraw all charts
                     series.fireSeriesEvent(new SeriesEvent(null, SeriesEventType.REDRAW));
+
+                    // Redraw a single chart
+                    //chartBand1.redraw();
+
                     lastTimerCall = now;
                 }
             }
@@ -153,12 +162,29 @@ public class Demo extends Application {
         stage.setScene(scene);
         stage.show();
 
+        // Calculate number of nodes
+        calcNoOfNodes(pane);
+        System.out.println(noOfNodes + " Nodes in SceneGraph");
+
         timer.start();
     }
 
     @Override public void stop() {
         System.exit(0);
     }
+
+
+    // ******************** Misc **********************************************
+    private static void calcNoOfNodes(Node node) {
+        if (node instanceof Parent) {
+            if (((Parent) node).getChildrenUnmodifiable().size() != 0) {
+                ObservableList<Node> tempChildren = ((Parent) node).getChildrenUnmodifiable();
+                noOfNodes += tempChildren.size();
+                for (Node n : tempChildren) { calcNoOfNodes(n); }
+            }
+        }
+    }
+
 
     public static void main(String[] args) {
         launch(args);

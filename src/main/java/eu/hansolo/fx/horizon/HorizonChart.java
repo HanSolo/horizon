@@ -124,14 +124,7 @@ public class HorizonChart<T> extends Region {
                 tooltip.hide();
             }
         };
-        seriesListener          = seriesEvent -> {
-            noOfItems = SERIES.getNoOfItems();
-            minY      = SERIES.getItems().stream().mapToDouble(Data::getY).min().getAsDouble();
-            maxY      = SERIES.getItems().stream().mapToDouble(Data::getY).max().getAsDouble();
-            bandWidth = getRangeY() / getNoOfBands();
-            prepareData();
-            drawChart();
-        };
+        seriesListener          = seriesEvent -> redraw();
 
         initGraphics();
         registerListeners();
@@ -295,7 +288,7 @@ public class HorizonChart<T> extends Region {
         if (COLORS.size() < getNoOfBands()) {
             Color negativeBaseColor = COLORS.get(0);
             if (null == negativeBaseColor) { negativeBaseColor = Color.RED; }
-            belowColors = Helper.createColorVariationsList(negativeBaseColor, getNoOfBands());
+            belowColors = Helper.createColorVariationsAsList(negativeBaseColor, getNoOfBands());
         } else {
             belowColors = COLORS;
         }
@@ -324,7 +317,7 @@ public class HorizonChart<T> extends Region {
         if (COLORS.size() < getNoOfBands()) {
             Color positiveBaseColor = COLORS.get(0);
             if (null == positiveBaseColor) { positiveBaseColor = Color.RED; }
-            aboveColors = Helper.createColorVariationsList(positiveBaseColor, getNoOfBands());
+            aboveColors = Helper.createColorVariationsAsList(positiveBaseColor, getNoOfBands());
         } else {
             aboveColors = COLORS;
         }
@@ -526,8 +519,8 @@ public class HorizonChart<T> extends Region {
         } else {
             belowColor = Helper.getComplementaryColor(aboveColor);
         }
-        aboveColors = Helper.createColorVariationsList(aboveColor, noOfBands);
-        belowColors = Helper.createColorVariationsList(belowColor, noOfBands);
+        aboveColors = Helper.createColorVariationsAsList(aboveColor, noOfBands);
+        belowColors = Helper.createColorVariationsAsList(belowColor, noOfBands);
     }
 
 
@@ -543,9 +536,20 @@ public class HorizonChart<T> extends Region {
 
             // Scale chart in x- and y-direction to visible pane
             scaleX = width / (getNoOfItems() - 1);
-            scaleY = height / ((getMaxY() - getMinY()) / (getNoOfBands()));
+            scaleY = height / (getRangeY() / (getNoOfBands()));
 
             drawChart();
         }
+    }
+
+    public void redraw() {
+        noOfItems = getSeries().getNoOfItems();
+        minY      = getSeries().getItems().stream().mapToDouble(Data::getY).min().getAsDouble();
+        maxY      = getSeries().getItems().stream().mapToDouble(Data::getY).max().getAsDouble();
+        bandWidth = getRangeY() / getNoOfBands();
+        scaleX    = width / (getNoOfItems() - 1);
+        scaleY    = height / (getRangeY() / (getNoOfBands()));
+        prepareData();
+        drawChart();
     }
 }
