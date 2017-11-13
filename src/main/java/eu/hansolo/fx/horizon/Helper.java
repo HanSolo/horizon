@@ -68,7 +68,7 @@ public class Helper {
         return Color.hsb(COLOR.getHue() + 180, COLOR.getSaturation(), COLOR.getBrightness());
     }
 
-    public static final List<Color> createColorVariationsList(final Color COLOR, final int NO_OF_COLORS) {
+    public static final List<Color> createColorVariationsAsList(final Color COLOR, final int NO_OF_COLORS) {
         return Arrays.asList(createColorVariations(COLOR, NO_OF_COLORS));
     }
     public static final Color[] createColorVariations(final Color COLOR, final int NO_OF_COLORS) {
@@ -81,7 +81,7 @@ public class Helper {
         return colors;
     }
 
-    public static final List<Color> getColorRangeMinMaxList(final Color COLOR, final int STEPS) {
+    public static final List<Color> getColorRangeMinMaxAsList(final Color COLOR, final int STEPS) {
         return Arrays.asList(getColorRangeMinMax(COLOR, STEPS));
     }
     public static final Color[] getColorRangeMinMax(final Color COLOR, final int STEPS) {
@@ -96,7 +96,7 @@ public class Helper {
         return new Color[] { fromColor, toColor };
     }
 
-    public static List<Point> subdividePoints(final List<Point> POINTS, final int SUB_DIVISIONS) {
+    public static List<Point> subdividePointsAsList(final List<Point> POINTS, final int SUB_DIVISIONS) {
         Point[] points = POINTS.toArray(new Point[0]);
         return Arrays.asList(subdividePoints(points, SUB_DIVISIONS));
     }
@@ -125,7 +125,7 @@ public class Helper {
         return subdividedPoints;
     }
 
-    public static List<Point> subdividePointsLinear(final List<Point> POINTS, final int SUB_DIVISIONS) {
+    public static List<Point> subdividePointsLinearAsList(final List<Point> POINTS, final int SUB_DIVISIONS) {
         Point[] points = POINTS.toArray(new Point[0]);
         return Arrays.asList(subdividePointsLinear(points, SUB_DIVISIONS));
     }
